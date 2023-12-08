@@ -7,26 +7,18 @@ font-family: 'Space Mono', monospace; */
   --elements-distance: clamp(1rem, 5vw, 2rem);
   --dark: #111;
   --light: #eee;
-
   --text-900: hsl(0, 0%, 100%);
   --text-800: hsl(0, 0%, 90%);
   --text-900-inverse: hsl(208, 37%, 10%);
-
   --global-background: #101016;
-
   --border-color: hsla(0, 0%, 100%, 0.3);
-  
   font-family: 'Space Grotesk', Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
-  /* color-scheme: light dark; */
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
 }
 
 body {
@@ -40,19 +32,15 @@ body {
   flex-direction: column;
   height: 100%;
   margin: 0 auto;
-  transition: background-color 150ms ease;
+  transition: background-color 70ms ease;
 }
-
 body.dark {
   --text-900: hsl(208, 37%, 10%);
   --text-800: hsl(208, 37%, 20%);
   --text-900-inverse: hsl(0, 0%, 100%);
-
   --global-background: #ffffff;
-
   --border-color: hsl(0, 0%, 85%);
 }
-
 /* @media (prefers-color-scheme: light) {
   :root {
     --text-900: hsl(208, 37%, 10%);
@@ -64,7 +52,6 @@ body.dark {
     --border-color: hsl(0, 0%, 85%);
   }
 } */
-
 a {
   font-weight: 500;
   color: inherit;
@@ -175,7 +162,7 @@ input:focus {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  transition: all 100ms ease;
+  transition: opacity 100ms ease;
 }
 
 .activity:first-child {
@@ -285,28 +272,6 @@ footer {
 #dark-mode input:checked ~ .toggle {
 	background-color: #ffffff;
 }
-
-/* @media only screen and (max-width: 768px) {
-	#dark-mode {
-		width: 45px;
-		height: 45px;
-	}
-
-	.toggle {
-		width: 45px;
-		height: 45px;
-	}
-
-	.sun {
-		font-size: 1.35rem;
-	}
-
-	.moon {
-		font-size: 1.35rem;
-	}
-} */
-
-
 
 .strike {
   text-decoration: line-through;

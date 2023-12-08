@@ -1,7 +1,7 @@
 const form = document.querySelector('#form');
 const insertedActivity = document.querySelector('#activity-input');
 const activitiesContainer = document.querySelector('#activities');
-
+let nextActivityId = parseInt(localStorage.getItem('nextActivityId')) || 0;
 
 const clearInputField = () => {
   insertedActivity.value = '';
@@ -16,19 +16,21 @@ const log = (item) => {
   console.log(item);
 }
 
-const addActivity = (activity) => {
+const addActivity = (activity, id = null) => {
+  if (id === null) {
+    id = nextActivityId++;
+    localStorage.setItem('nextActivityId', nextActivityId.toString());
+  }
   const createActivityElement = (activity) => {
     const element = document.createElement('div');
     element.innerText = activity;
     element.classList.add('activity');
-
     element.addEventListener('click', () => {
       element.classList.toggle('strike');
       element.classList.toggle('soften');
     });
-
     return element;
-}
+  }
   const createRemoveButton = () => {
     const button = document.createElement('div');
     button.innerText = 'X'
@@ -36,40 +38,50 @@ const addActivity = (activity) => {
     button.addEventListener('click', removeActivity);
     return button;
   }
-  
+
   const newElement = createActivityElement(activity);
   const removeButton = createRemoveButton();
 
-  
-  // drag feature
+  newElement.dataset.id = id;
   newElement.setAttribute('draggable', true);
-  // attachDragEvents(newElement);
 
-
-  
   activitiesContainer.appendChild(newElement);
   newElement.appendChild(removeButton);
-  
   saveActivitiesToLocalStorage();
 }
 
 const removeActivity = (event) => {
   const activityElement = event.target.parentNode;
-  const activityText = activityElement.textContent.replace('X', '').trim();
-  
+  const activityId = activityElement.dataset.id;
   // Remove the element from the DOM
   activitiesContainer.removeChild(activityElement);
-
   // Remove the element from local storage
-  removeActivityFromLocalStorage(activityText);
+  removeActivityFromLocalStorage(activityId);
 } 
 
-const removeActivityFromLocalStorage = (activityText) => {
+// Handle browser STORAGE
+const removeActivityFromLocalStorage = (activityId) => {
   let activities = JSON.parse(localStorage.getItem('activities'));
   // Filter out the removed activity
-  activities = activities.filter(activity => activity !== activityText);
+  activities = activities.filter(activity => activity.id !== activityId);
   // Save the updated activities list to local storage
   localStorage.setItem('activities', JSON.stringify(activities));
+}
+const saveActivitiesToLocalStorage = () => {
+  let activities = [];
+  document.querySelectorAll('.activity').forEach(activity => {
+    activities.push({
+      id: activity.dataset.id,
+      text: activity.innerText.replace('X', '').trim()
+    });
+  });
+  localStorage.setItem('activities', JSON.stringify(activities));
+}
+const loadActivitiesFromLocalStorage = () => {
+  const storedActivities = JSON.parse(localStorage.getItem('activities'));
+  if (storedActivities) {
+    storedActivities.forEach(activity => addActivity(activity.text, activity.id));
+  }
 }
 
 const handleSubmit = (event) => {
@@ -82,26 +94,8 @@ const handleSubmit = (event) => {
   }
 };
 
-const saveActivitiesToLocalStorage = () => {
-  let activities = [];
-  document.querySelectorAll('.activity').forEach(activity => {
-    activities.push(activity.innerText.replace('X', '').trim());
-  });
-  localStorage.setItem('activities', JSON.stringify(activities));
-}
-
-const loadActivitiesFromLocalStorage = () => {
-  const storedActivities = JSON.parse(localStorage.getItem('activities'));
-  if (storedActivities) {
-    storedActivities.forEach(activity => addActivity(activity));
-  }
-}
-
 form.addEventListener('submit', handleSubmit);
-
 document.addEventListener('DOMContentLoaded', loadActivitiesFromLocalStorage);
-
-
 
 // Dark Mode + keep dark mode on reload
 const darkModeButton = document.getElementById('dark-mode');
@@ -132,43 +126,3 @@ const attachDragEvents = (element) => {
   element.addEventListener('dragenter', handleDragEnter);
   element.addEventListener('dragleave', handleDragLeave);
 };
-
-// Drag and Drop Event Handlers
-// let draggedItem = null;
-
-// const handleDragStart = (e) => {
-//   draggedItem = e.target;
-//   e.dataTransfer.effectAllowed = 'move';
-//   e.dataTransfer.setData('text/html', e.target.innerHTML);
-// };
-
-// const handleDragOver = (e) => {
-//   e.preventDefault();
-//   e.dataTransfer.dropEffect = 'move';
-// };
-
-// const handleDrop = (e) => {
-//   e.preventDefault();
-//   if (e.target.className === 'activity' && draggedItem !== e.target) {
-//       e.target.parentNode.insertBefore(draggedItem, e.target.nextSibling);
-//       saveActivitiesToLocalStorage();
-//   }
-// };
-
-// const handleDragEnter = (e) => {
-//   e.preventDefault();
-// };
-
-// const handleDragLeave = (e) => {
-//   e.preventDefault();
-// };
-
-// // Call this function initially to attach events to already existing items
-// const initializeDragEvents = () => {
-//   document.querySelectorAll('.activity').forEach(item => attachDragEvents(item));
-// };
-
-// document.addEventListener('DOMContentLoaded', () => {
-//   loadActivitiesFromLocalStorage();
-//   initializeDragEvents(); // Initialize drag events after loading activities
-// });
