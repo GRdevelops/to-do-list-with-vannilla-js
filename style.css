@@ -285,22 +285,22 @@ footer {
 	background-color: #ffffff;
 }
 
-@media only screen and (max-width: 768px) {
+/* @media only screen and (max-width: 768px) {
 	#dark-mode {
-		width: 40px;
-		height: 40px;
+		width: 45px;
+		height: 45px;
 	}
 
 	.toggle {
-		width: 40px;
-		height: 40px;
+		width: 45px;
+		height: 45px;
 	}
 
 	.sun {
-		font-size: 1.2em;
+		font-size: 1.35rem;
 	}
 
 	.moon {
-		font-size: 1.2em;
+		font-size: 1.35rem;
 	}
-}
+} */
