@@ -25,10 +25,6 @@ const addActivity = (activity, id = null) => {
     const element = document.createElement('div');
     element.innerText = activity;
     element.classList.add('activity');
-    element.addEventListener('click', () => {
-      element.classList.toggle('strike');
-      element.classList.toggle('soften');
-    });
     return element;
   }
   const createRemoveButton = () => {
@@ -38,13 +34,9 @@ const addActivity = (activity, id = null) => {
     button.addEventListener('click', removeActivity);
     return button;
   }
-
   const newElement = createActivityElement(activity);
   const removeButton = createRemoveButton();
-
   newElement.dataset.id = id;
-  newElement.setAttribute('draggable', true);
-
   activitiesContainer.appendChild(newElement);
   newElement.appendChild(removeButton);
   saveActivitiesToLocalStorage();
@@ -99,7 +91,6 @@ document.addEventListener('DOMContentLoaded', loadActivitiesFromLocalStorage);
 
 // Dark Mode + keep dark mode on reload
 const darkModeButton = document.getElementById('dark-mode');
-
 let debounceTimer;
 darkModeButton.addEventListener('click', () => {
     clearTimeout(debounceTimer);
@@ -110,19 +101,9 @@ darkModeButton.addEventListener('click', () => {
         localStorage.setItem('darkMode', isDarkMode);
     }, 100);
 });
-
 // Check and apply user's preference on page load
 document.addEventListener('DOMContentLoaded', () => {
     if (localStorage.getItem('darkMode') === 'true') {
         darkModeButton.click(); // Simulate a click if the stored preference is dark mode
     }
 });
-
-// Function to attach drag events
-const attachDragEvents = (element) => {
-  element.addEventListener('dragstart', handleDragStart);
-  element.addEventListener('dragover', handleDragOver);
-  element.addEventListener('drop', handleDrop);
-  element.addEventListener('dragenter', handleDragEnter);
-  element.addEventListener('dragleave', handleDragLeave);
-};
