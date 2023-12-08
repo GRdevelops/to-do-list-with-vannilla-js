@@ -12,7 +12,7 @@ font-family: 'Space Mono', monospace; */
   --text-800: hsl(0, 0%, 90%);
   --text-900-inverse: hsl(208, 37%, 10%);
 
-  --global-background: #242424;
+  --global-background: #101016;
 
   --border-color: hsla(0, 0%, 100%, 0.3);
   
@@ -21,8 +21,6 @@ font-family: 'Space Mono', monospace; */
   font-weight: 400;
 
   color-scheme: light dark;
-  color: var(--text-900);
-  background-color: var(--global-background);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -31,7 +29,31 @@ font-family: 'Space Mono', monospace; */
 
 }
 
-@media (prefers-color-scheme: light) {
+body {
+  color: var(--text-900);
+  background-color: var(--global-background);
+  min-height: 100vh;
+  min-width: 320px;
+  max-width: 1920px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  margin: 0;
+  transition: background-color 150ms ease;
+}
+
+body.dark {
+  --text-900: hsl(208, 37%, 10%);
+  --text-800: hsl(208, 37%, 20%);
+  --text-900-inverse: hsl(0, 0%, 100%);
+
+  --global-background: #ffffff;
+
+  --border-color: hsl(0, 0%, 85%);
+}
+
+/* @media (prefers-color-scheme: light) {
   :root {
     --text-900: hsl(208, 37%, 10%);
     --text-800: hsl(208, 37%, 20%);
@@ -41,7 +63,7 @@ font-family: 'Space Mono', monospace; */
 
     --border-color: hsl(0, 0%, 85%);
   }
-}
+} */
 
 a {
   font-weight: 500;
@@ -52,13 +74,10 @@ a:hover {
   opacity: 0.9;
 }
 
-body {
-  min-height: 100vh;
-  min-width: 320px;
+nav {
+  padding: 1rem;
   display: flex;
-  flex-direction: column;
-  height: 100%;
-  margin: 0;
+  justify-content: flex-end;
 }
 
 main {
@@ -66,10 +85,10 @@ main {
 }
 
 .app-container {
+  max-width: 450px;
   margin: 0 auto;
   display: flex;
   justify-content: center;
-  padding: 3rem .5rem;
 }
 
 h1 {
@@ -80,6 +99,7 @@ h1 {
 }
 
 #app {
+  width: 100%;
   max-width: 1280px;
   margin: 0 auto;
   padding: var(--elements-distance);
@@ -90,32 +110,24 @@ h1 {
 }
 
 button {
-  color: hsl(0, 0%, 100%);
-  /* background-color: #8488e0; */
-  background-color: #646cff;
-  opacity: 0.9;
+  color: #06064d;
+  background-color: hsl(237, 72%, 79%);
   border-radius: 8px;
   border: 1px solid transparent;
   align-self: stretch;
   padding: 0.6em 1.2em;
   font-size: 1em;
-  font-weight: 500;
+  font-weight: 500 !important;
   font-family: inherit;
   cursor: pointer;
   transition: all 150ms ease;
 }
 button:hover {
-  /* background-color: #646cff; */
-  opacity: 1;
+  background-color: hsl(237, 72%, 85%);
+  box-shadow: 0 0px 4px hsla(237, 72%, 79%, 0.4), 0 0px 8px hsla(237, 72%, 79%, 0.2);
 }
 button:active {
-  /* background-color: #8488e0; */
-  opacity: 0.9;
-}
-@media screen and (pointer: coarse), (hover: none) {
-  button {
-    opacity: 1;
-  }
+  background-color: hsl(237, 72%, 79%);
 }
 
 form {
@@ -130,7 +142,6 @@ form {
 }
 
 input {
-  /* color: var(--dark); */
   background-color: transparent;
   border-radius: .5rem;
   padding: 1rem;
@@ -211,4 +222,85 @@ footer {
   flex-direction: column;
   align-items: center;
   gap: .5rem;
+}
+
+
+/* Dark mode */
+#dark-mode {
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	cursor: pointer;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#dark-mode input {
+	position: absolute;
+	opacity: 0;
+}
+
+.sun {
+	position: absolute;
+	font-size: 1.5em;
+	color: #222;
+	filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.3));
+	transition: 500ms ease;
+	transform: scale(0);
+}
+
+#dark-mode input:checked ~ .sun {
+	transform: scale(1) rotate(360deg);
+}
+
+.moon {
+	font-size: 1.5em;
+	color: #eee;
+	filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.3));
+	transition: 500ms ease;
+}
+
+#dark-mode input:checked ~ .moon {
+	transform: rotate(360deg) scale(0);
+}
+
+.internal-shadow {
+	box-shadow: inset 0 8px 60px rgba(0, 0, 0, 0.05), inset 0 8px 8px rgba(0, 0, 0, 0.05),
+		inset 0 -4px 4px rgba(0, 0, 0, 0.05);
+}
+
+.toggle {
+	position: absolute;
+	display: block;
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	background-color: #1e1e21;
+	z-index: -1;
+	transition: 500ms;
+}
+
+#dark-mode input:checked ~ .toggle {
+	background-color: #ffffff;
+}
+
+@media only screen and (max-width: 768px) {
+	#dark-mode {
+		width: 40px;
+		height: 40px;
+	}
+
+	.toggle {
+		width: 40px;
+		height: 40px;
+	}
+
+	.sun {
+		font-size: 1.2em;
+	}
+
+	.moon {
+		font-size: 1.2em;
+	}
 }
