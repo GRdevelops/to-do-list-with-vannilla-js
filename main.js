@@ -21,7 +21,6 @@ const addActivity = (activity) => {
     const element = document.createElement('div');
     element.innerText = activity;
     element.classList.add('activity');
-    element.setAttribute('draggable', true);
 
     element.addEventListener('click', () => {
       element.classList.toggle('strike');
@@ -30,7 +29,6 @@ const addActivity = (activity) => {
 
     return element;
 }
-
   const createRemoveButton = () => {
     const button = document.createElement('div');
     button.innerText = 'X'
@@ -41,6 +39,13 @@ const addActivity = (activity) => {
   
   const newElement = createActivityElement(activity);
   const removeButton = createRemoveButton();
+
+  
+  // drag feature
+  newElement.setAttribute('draggable', true);
+  // attachDragEvents(newElement);
+
+
   
   activitiesContainer.appendChild(newElement);
   newElement.appendChild(removeButton);
@@ -119,30 +124,51 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+// Function to attach drag events
+const attachDragEvents = (element) => {
+  element.addEventListener('dragstart', handleDragStart);
+  element.addEventListener('dragover', handleDragOver);
+  element.addEventListener('drop', handleDrop);
+  element.addEventListener('dragenter', handleDragEnter);
+  element.addEventListener('dragleave', handleDragLeave);
+};
+
+// Drag and Drop Event Handlers
 // let draggedItem = null;
 
 // const handleDragStart = (e) => {
-//     draggedItem = e.target;
+//   draggedItem = e.target;
+//   e.dataTransfer.effectAllowed = 'move';
+//   e.dataTransfer.setData('text/html', e.target.innerHTML);
 // };
 
 // const handleDragOver = (e) => {
-//     e.preventDefault();
+//   e.preventDefault();
+//   e.dataTransfer.dropEffect = 'move';
 // };
 
 // const handleDrop = (e) => {
-//     if (e.target.className === 'activity') {
-//         activitiesContainer.insertBefore(draggedItem, e.target);
-//         saveActivitiesToLocalStorage();
-//     }
+//   e.preventDefault();
+//   if (e.target.className === 'activity' && draggedItem !== e.target) {
+//       e.target.parentNode.insertBefore(draggedItem, e.target.nextSibling);
+//       saveActivitiesToLocalStorage();
+//   }
 // };
 
-// document.querySelectorAll('.activity').forEach(item => {
-//     item.addEventListener('dragstart', handleDragStart);
-//     item.addEventListener('dragover', handleDragOver);
-//     item.addEventListener('drop', handleDrop);
+// const handleDragEnter = (e) => {
+//   e.preventDefault();
+// };
+
+// const handleDragLeave = (e) => {
+//   e.preventDefault();
+// };
+
+// // Call this function initially to attach events to already existing items
+// const initializeDragEvents = () => {
+//   document.querySelectorAll('.activity').forEach(item => attachDragEvents(item));
+// };
+
+// document.addEventListener('DOMContentLoaded', () => {
+//   loadActivitiesFromLocalStorage();
+//   initializeDragEvents(); // Initialize drag events after loading activities
 // });
-
-
-// add strike class on click
-
-
