@@ -175,6 +175,7 @@ input:focus {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  transition: all 100ms ease;
 }
 
 .activity:first-child {
@@ -304,3 +305,14 @@ footer {
 		font-size: 1.35rem;
 	}
 } */
+
+
+
+.strike {
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+}
+
+.soften {
+  opacity: 0.5;
+}
