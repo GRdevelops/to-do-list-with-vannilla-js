@@ -1,15 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+/* font-family: 'Space Grotesk', sans-serif;
+font-family: 'Space Mono', monospace; */
+
 :root {
-  --elements-distance: 1rem;
+  --elements-distance: clamp(1rem, 5vw, 2rem);
   --dark: #111;
   --light: #eee;
+
+  --text-900: hsl(0, 0%, 100%);
+  --text-800: hsl(0, 0%, 90%);
+  --text-900-inverse: hsl(208, 37%, 10%);
+
+  --global-background: #242424;
+
+  --border-color: hsla(0, 0%, 100%, 0.3);
   
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Space Grotesk', Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
   color-scheme: light dark;
-  color: var(--dark);
-  background-color: #242424;
+  color: var(--text-900);
+  background-color: var(--global-background);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -18,26 +31,49 @@
 
 }
 
+@media (prefers-color-scheme: light) {
+  :root {
+    --text-900: hsl(208, 37%, 10%);
+    --text-800: hsl(208, 37%, 20%);
+    --text-900-inverse: hsl(0, 0%, 100%);
+
+    --global-background: #ffffff;
+
+    --border-color: hsl(0, 0%, 85%);
+  }
+}
+
 a {
   font-weight: 500;
-  color: #646cff;
+  color: inherit;
   text-decoration: inherit;
 }
 a:hover {
-  color: #535bf2;
+  opacity: 0.9;
 }
 
 body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
   min-height: 100vh;
-  padding: 0 .5rem;
+  min-width: 320px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  margin: 0;
+}
+
+main {
+  flex: 1;
+}
+
+.app-container {
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  padding: 3rem .5rem;
 }
 
 h1 {
-  font-size: 2.2em;
+  font-size: clamp(2.5rem, 13vw, 3.5rem);
   line-height: 1.1;
   font-weight: 400;
   letter-spacing: -0.04em;
@@ -47,7 +83,6 @@ h1 {
   max-width: 1280px;
   margin: 0 auto;
   padding: var(--elements-distance);
-  background-color: white;
   border-radius: 1rem;
   display: flex;
   flex-direction: column;
@@ -55,6 +90,10 @@ h1 {
 }
 
 button {
+  color: hsl(0, 0%, 100%);
+  /* background-color: #8488e0; */
+  background-color: #646cff;
+  opacity: 0.9;
   border-radius: 8px;
   border: 1px solid transparent;
   align-self: stretch;
@@ -62,38 +101,22 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  /* background-color: #242424; */
-  background-color: #8488e0;
-  color: var(--light);
   cursor: pointer;
   transition: all 150ms ease;
 }
 button:hover {
-  background-color: #646cff;
+  /* background-color: #646cff; */
+  opacity: 1;
 }
 button:active {
-  background-color: #8488e0;
+  /* background-color: #8488e0; */
+  opacity: 0.9;
 }
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
+@media screen and (pointer: coarse), (hover: none) {
   button {
-    background-color: #f9f9f9;
+    opacity: 1;
   }
 }
-
-/* form {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: .5rem;
-} */
 
 form {
   display: grid;
@@ -107,12 +130,11 @@ form {
 }
 
 input {
-  background-color: #ffffff;
-  color: var(--dark);
-  border: none;
+  /* color: var(--dark); */
+  background-color: transparent;
   border-radius: .5rem;
   padding: 1rem;
-  border: 1px solid #ccc;
+  border: 1px solid var(--border-color);
 }
 
 input:focus {
@@ -135,11 +157,10 @@ input:focus {
 .activity {
   position: relative;
   margin-top: .5rem;
-  color: var(--dark);
-  border: none;
+  /* color: var(--dark); */
   border-radius: .5rem;
   padding: 1rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border-color);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -150,6 +171,7 @@ input:focus {
 }
 
 .remove-button {
+  font-weight: 300;
   position: absolute;
   right: .5rem;
   border-radius: .3rem;
@@ -164,6 +186,29 @@ input:focus {
 }
 
 .remove-button:hover {
-  border: 1px solid #ddd;
+  border: 1px solid var(--border-color);
   box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.1);
+}
+
+.svg-icon {
+  color: var(--text-900);
+  height: 25px;
+  width: auto;
+}
+
+footer {
+  padding: 1rem;
+  margin-top: 10vh;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.footer-pack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .5rem;
 }
