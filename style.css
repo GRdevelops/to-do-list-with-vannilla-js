@@ -33,6 +33,7 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  padding: 0 .5rem;
 }
 
 h1 {
@@ -87,10 +88,22 @@ button:active {
   }
 }
 
-form {
+/* form {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: .5rem;
+} */
+
+form {
+  display: grid;
+  gap: .5rem;
+  grid-template-columns: minmax(200px, 300px) 1fr;
+}
+@media screen and (max-width: 350px) {
+  form {
+    grid-template-columns: 1fr;
+  }
 }
 
 input {
@@ -105,7 +118,6 @@ input {
 input:focus {
   outline: none;
   animation: pulse 2s infinite;
-
 }
 
 @keyframes pulse {
