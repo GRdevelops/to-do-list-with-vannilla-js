@@ -1,0 +1,349 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+/* font-family: 'Space Grotesk', sans-serif;
+font-family: 'Space Mono', monospace; */
+
+:root {
+	--elements-distance: clamp(1rem, 5vw, 2rem);
+	--dark: #111;
+	--light: #eee;
+	--text-900: hsl(0, 0%, 100%);
+	--text-800: hsl(0, 0%, 90%);
+	--text-700: hsl(0, 0%, 70%);
+	--text-900-inverse: hsl(208, 37%, 10%);
+	--global-background: #101016;
+	--border-color: hsla(0, 0%, 100%, 0.3);
+	font-family: 'Space Grotesk', Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+	line-height: 1.5;
+	font-weight: 400;
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+body {
+	color: var(--text-900);
+	background-color: var(--global-background);
+	min-height: 100vh;
+	min-width: 320px;
+	max-width: 450px;
+	margin: 0 auto;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	margin: 0 auto;
+	transition: background-color 70ms ease;
+}
+body.dark {
+	--text-900: hsl(208, 37%, 10%);
+	--text-800: hsl(208, 37%, 20%);
+	--text-700: hsl(208, 10%, 30%);
+	--text-900-inverse: hsl(0, 0%, 100%);
+	--global-background: #ffffff;
+	--border-color: hsl(0, 0%, 85%);
+}
+/* @media (prefers-color-scheme: light) {
+  :root {
+    --text-900: hsl(208, 37%, 10%);
+    --text-800: hsl(208, 37%, 20%);
+    --text-900-inverse: hsl(0, 0%, 100%);
+
+    --global-background: #ffffff;
+
+    --border-color: hsl(0, 0%, 85%);
+  }
+} */
+a {
+	font-weight: 500;
+	color: inherit;
+	text-decoration: inherit;
+}
+a:hover {
+	opacity: 0.9;
+}
+
+nav {
+	padding: var(--elements-distance);
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	gap: 0.25rem;
+}
+
+main {
+	flex: 1;
+}
+
+hr {
+	opacity: 0.4;
+	height: 1px;
+	background-color: var(--text-800);
+	width: 100%;
+	border-radius: 1rem;
+}
+
+.app-container {
+	/* max-width: 450px; */
+	margin: 0 auto;
+	display: flex;
+	justify-content: center;
+}
+
+h1 {
+	font-size: clamp(2.5rem, 13vw, 3.5rem);
+	line-height: 1.1;
+	font-weight: 400;
+	letter-spacing: -0.04em;
+}
+
+#app {
+	width: 100%;
+	max-width: 1280px;
+	margin: 0 auto;
+	border-radius: 1rem;
+	display: flex;
+	flex-direction: column;
+	gap: var(--elements-distance);
+	padding: var(--elements-distance);
+}
+
+button {
+	color: #06064d;
+	background-color: hsl(237, 72%, 79%);
+	border-radius: 8px;
+	border: 1px solid transparent;
+	align-self: stretch;
+	padding: 0.6em 1.2em;
+	font-size: 1em;
+	font-weight: 500 !important;
+	font-family: inherit;
+	cursor: pointer;
+	transition: all 150ms ease;
+}
+button:hover {
+	background-color: hsl(237, 72%, 85%);
+	box-shadow: 0 0px 4px hsla(237, 72%, 79%, 0.4), 0 0px 8px hsla(237, 72%, 79%, 0.2);
+}
+button:active {
+	background-color: hsl(237, 72%, 79%);
+}
+
+button.outlined {
+	color: var(--text-900);
+	border: 2px solid hsl(237, 72%, 79%);
+	background-color: transparent;
+}
+
+form {
+	display: grid;
+	gap: 0.5rem;
+	grid-template-columns: minmax(200px, 300px) 1fr;
+}
+@media screen and (max-width: 350px) {
+	form {
+		grid-template-columns: 1fr;
+	}
+}
+
+#activity-input {
+	background-color: transparent;
+	border-radius: 0.5rem;
+	padding: 1rem;
+	border: 2px solid var(--border-color);
+}
+
+#activity-input:focus {
+	outline: none;
+	animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+	0% {
+		box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.1);
+	}
+	70% {
+		box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+	}
+	100% {
+		box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+	}
+}
+
+.shell {
+	position: relative;
+	margin-top: 0.5rem;
+	/* color: var(--dark); */
+	border-radius: 0.5rem;
+	padding-right: 0.4rem;
+	border: 1px solid var(--border-color);
+	display: flex;
+	flex-wrap: nowrap;
+	justify-content: space-between;
+	align-items: center;
+	gap: 0.5rem;
+	transition: opacity 100ms ease;
+}
+
+.shell:first-child {
+	margin-top: 1rem;
+}
+
+.shell.focused {
+	animation: pulse 2s infinite;
+}
+
+.activity {
+	flex-grow: 1;
+	word-break: keep-all;
+}
+
+.editable-element {
+	padding: 0.7rem;
+	outline: none;
+}
+
+.remove-button {
+	/* position: absolute; */
+	/* right: .5rem; */
+	flex-shrink: 0;
+	border-radius: 0.3rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	width: 2rem;
+	height: 2rem;
+	cursor: pointer;
+}
+
+.remove-button:hover {
+	border: 1px solid var(--border-color);
+	box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.1);
+}
+
+.remove-button .line {
+	position: absolute;
+	background-color: var(--text-700);
+	height: 2px;
+	width: 14px;
+	transform: rotate(45deg);
+	border-radius: 1rem;
+}
+
+.line.second {
+	transform: rotate(-45deg);
+}
+
+.svg-icon {
+	color: var(--text-900);
+	height: 25px;
+	width: auto;
+}
+
+footer {
+	padding: var(--elements-distance);
+}
+
+footer > .wrapper {
+	font-size: 14px;
+	padding: 1.5rem 2rem;
+	margin-top: 10vh;
+	margin-bottom: 1rem;
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 1rem;
+	border: 2px solid var(--border-color);
+	border-radius: 1rem;
+}
+
+.two-col {
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.col {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	gap: 0.5rem;
+}
+
+.logo {
+	padding: 0.2rem;
+	width: 150px;
+	height: auto;
+}
+
+/* Dark mode */
+#dark-mode {
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	cursor: pointer;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#dark-mode input {
+	position: absolute;
+	opacity: 0;
+}
+
+.sun {
+	position: absolute;
+	font-size: 1.5em;
+	color: #222;
+	filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.3));
+	transition: 500ms ease;
+	transform: scale(0);
+}
+
+#dark-mode input:checked ~ .sun {
+	transform: scale(1) rotate(360deg);
+}
+
+.moon {
+	font-size: 1.5em;
+	color: #eee;
+	filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.3));
+	transition: 500ms ease;
+}
+
+#dark-mode input:checked ~ .moon {
+	transform: rotate(360deg) scale(0);
+}
+
+/* .internal-shadow {
+	box-shadow: inset 0 8px 60px rgba(0, 0, 0, 0.04), inset 0 8px 8px rgba(0, 0, 0, 0.04),
+		inset 0 -4px 4px rgba(0, 0, 0, 0.04);
+} */
+
+.toggle {
+	position: absolute;
+	display: block;
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	/* background-color: #1e1e21; */
+	z-index: -1;
+	transition: 500ms;
+}
+
+#dark-mode input:checked ~ .toggle {
+	/* background-color: #ffffff; */
+}
+
+.strike {
+	text-decoration: line-through;
+	text-decoration-thickness: 2px;
+}
+
+.soften {
+	opacity: 0.5;
+}

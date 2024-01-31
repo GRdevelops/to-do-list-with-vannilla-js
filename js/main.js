@@ -1,4 +1,12 @@
 import axios from 'axios';
+import { createAuth0Client } from '@auth0/auth0-spa-js';
+
+const auth0 = await createAuth0Client({
+	domain: 'desengineers.eu.auth0.com',
+	clientId: 'HU2tnn1e75i4PdjuFRP1ovHe6bcxcnvs',
+	// cacheLocation: 'localstorage',
+	// redirect_uri: 'http://localhost:5173/',
+});
 
 const form = document.querySelector('#form');
 // const insertedActivity = document.querySelector('#activity-input');
@@ -97,7 +105,17 @@ const loadTasks = async () => {
 
 	// fetch the data from the database
 	try {
-		const response = await axios.get('http://localhost:8080/tasks');
+		const accessToken = getAccessToken();
+		// console.log('Access Token: ', accessToken);
+
+		const user = await auth0.getUser();
+		const userEmail = user.email;
+
+		const response = await axios.get(`http://localhost:8080/tasks/user/${userEmail}`, {
+			headers: {
+				Authorization: 'Bearer ' + accessToken,
+			},
+		});
 		const dataArray = response.data;
 		console.log('Tasks loaded: ', dataArray);
 		displayTasksOnUI(dataArray);
@@ -108,16 +126,31 @@ const loadTasks = async () => {
 
 // Add a new task
 const addTask = async taskContent => {
-	const data = {
-		content: `${taskContent}`,
-	};
 
 	try {
-		const response = await axios.post('http://localhost:8080/tasks', data);
+		const accessToken = getAccessToken();
+		const user = await auth0.getUser();
+
+		if (!user) {
+			return alert("Can't add tasks. 🙁\nPlease login to your account. ")
+		}
+
+		const userEmail = user.email;
+
+		const response = await axios.post(
+			'http://localhost:8080/tasks',
+			{
+				user: `${userEmail}`,
+				content: `${taskContent}`
+			},
+			{
+				headers: {
+					Authorization: 'Bearer ' + accessToken,
+				},
+			}
+		);
 		const task = response.data;
-
-		console.log('Data successfully sent.', task);
-
+		console.log('Data successfully sent:', task);
 		loadTasks();
 	} catch (error) {
 		console.log('Error :', error);
@@ -134,8 +167,6 @@ const handleSubmit = event => {
 		console.log('Task field is empty. Form not submitted.');
 		return;
 	}
-
-	console.log('Task :', taskContent);
 
 	addTask(taskContent);
 
@@ -172,14 +203,122 @@ const modifyTask = async event => {
 	const taskId = firstParent.parentNode.dataset.id;
 
 	try {
-		const response = await axios.put(`http://localhost:8080/tasks/${taskId}`, { content: updatedContent });
-		console.log('Update successful', response);
+		const accessToken = await auth0.getTokenSilently();
+		const response = await axios.put(
+			`http://localhost:8080/tasks/${taskId}`,
+			{
+				content: updatedContent,
+			},
+			{
+				headers: {
+					Authorization: 'Bearer ' + accessToken,
+				},
+			}
+		);
+		console.log('Update successful:', response);
 	} catch (error) {
 		console.error('Error updating task', error);
 	}
 };
 
-// load tasks on page load
-loadTasks();
+
 
 // Implementare facciata dove vedere le task completate
+
+// AUTHENTICATION
+
+async function getAccessToken() {
+	const accessToken = await auth0.getTokenSilently();
+	return accessToken;
+}
+
+const loginButton = document.getElementById('login');
+const logoutButton = document.getElementById('logout');
+
+loginButton.addEventListener('click', async () => {
+	await auth0.loginWithRedirect({
+		authorizationParams: {
+			redirect_uri: 'http://localhost:5173/',
+		},
+	});
+});
+
+logoutButton.addEventListener('click', async () => {
+	auth0.logout({
+		logoutParams: {
+			returnTo: 'http://localhost:5173/',
+		},
+	});
+});
+
+
+const checkAuth = async () => {
+	const isAuthenticated = await auth0.isAuthenticated();
+  // console.log(isAuthenticated ? "User is authenticated" : "User is not authenticated");
+	logoutButton.classList.add('hidden');
+  if (isAuthenticated) {
+    // User is authenticated, proceed to load tasks or other user-specific data
+    loadTasks();
+		loginButton.classList.add('hidden');
+		logoutButton.classList.remove('hidden');
+  }
+};
+
+
+window.onload = async () => {
+	if (window.location.search.includes('code=') && window.location.search.includes('state=')) {
+			await auth0.handleRedirectCallback();
+			window.history.replaceState({}, document.title, '/'); // Clean up URL
+			checkAuth(); // Call loadTasks here after handling redirect callback
+	} else {
+			// Even if there's no auth callback in URL, attempt to load tasks
+			checkAuth();
+	}
+};
+
+checkAuth();
+
+
+
+
+
+
+
+// load tasks on page load
+// loadTasks();
+
+// TEST BUTTONS
+
+// // call an api
+// document.getElementById('callApi').addEventListener('click', async () => {
+// 	try {
+// 		const accessToken = await auth0.getTokenSilently();
+// 		// console.log("Access Token: ", accessToken);
+
+// 		const postData = {
+// 			content: 'prova post request',
+// 		};
+
+// 		const config = {
+// 			headers: {
+// 				Authorization: `Bearer ${accessToken}`,
+// 				'Content-Type': 'application/json',
+// 			},
+// 		};
+
+// 		const response = await axios.post('http://localhost:8080/tasks', postData, config);
+// 		const dataArray = await response.data;
+// 		console.log('Data posted successfully');
+// 	} catch (error) {
+// 		console.error('Error making POST request:', error);
+// 	}
+// });
+
+// // check user
+// document.getElementById('check-user').addEventListener('click', async event => {
+// 	const user = await auth0.getUser();
+// 	console.log('User:', user);
+// });
+
+
+
