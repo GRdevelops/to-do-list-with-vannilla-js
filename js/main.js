@@ -2,10 +2,8 @@ import axios from 'axios';
 import { createAuth0Client } from '@auth0/auth0-spa-js';
 
 const auth0 = await createAuth0Client({
-	domain: 'desengineers.eu.auth0.com',
-	clientId: 'HU2tnn1e75i4PdjuFRP1ovHe6bcxcnvs',
-	// cacheLocation: 'localstorage',
-	// redirect_uri: 'http://localhost:5173/',
+	domain: import.meta.env.VITE_AUTH0_DOMAIN,
+	clientId: import.meta.env.VITE_AUTH0_CLIENT_ID,
 });
 
 const form = document.querySelector('#form');
@@ -117,7 +115,7 @@ const loadTasks = async () => {
 			},
 		});
 		const dataArray = response.data;
-		console.log('Tasks loaded: ', dataArray);
+		// console.log('Tasks loaded: ', dataArray);
 		displayTasksOnUI(dataArray);
 	} catch (e) {
 		console.log('Error: ', e);
@@ -126,13 +124,12 @@ const loadTasks = async () => {
 
 // Add a new task
 const addTask = async taskContent => {
-
 	try {
 		const accessToken = getAccessToken();
 		const user = await auth0.getUser();
 
 		if (!user) {
-			return alert("Can't add tasks. 🙁\nPlease login to your account. ")
+			return alert("Can't add tasks. 🙁\nPlease login to your account. ");
 		}
 
 		const userEmail = user.email;
@@ -141,7 +138,7 @@ const addTask = async taskContent => {
 			'http://localhost:8080/tasks',
 			{
 				user: `${userEmail}`,
-				content: `${taskContent}`
+				content: `${taskContent}`,
 			},
 			{
 				headers: {
@@ -150,7 +147,7 @@ const addTask = async taskContent => {
 			}
 		);
 		const task = response.data;
-		console.log('Data successfully sent:', task);
+		// console.log('Data successfully sent:', task);
 		loadTasks();
 	} catch (error) {
 		console.log('Error :', error);
@@ -180,7 +177,7 @@ form.addEventListener('submit', handleSubmit);
 const deleteFromDatabase = async taskId => {
 	try {
 		const response = await axios.delete(`http://localhost:8080/tasks/${taskId}`);
-		console.log(response.data);
+		// console.log(response.data);
 		loadTasks();
 	} catch (error) {
 		console.log('Error: ', error);
@@ -215,13 +212,11 @@ const modifyTask = async event => {
 				},
 			}
 		);
-		console.log('Update successful:', response);
+		// console.log('Update successful:', response);
 	} catch (error) {
 		console.error('Error updating task', error);
 	}
 };
-
-
 
 // Implementare facciata dove vedere le task completate
 
@@ -238,7 +233,7 @@ const logoutButton = document.getElementById('logout');
 loginButton.addEventListener('click', async () => {
 	await auth0.loginWithRedirect({
 		authorizationParams: {
-			redirect_uri: 'http://localhost:5173/',
+			redirect_uri: `${window.location.origin}/`,
 		},
 	});
 });
@@ -246,43 +241,35 @@ loginButton.addEventListener('click', async () => {
 logoutButton.addEventListener('click', async () => {
 	auth0.logout({
 		logoutParams: {
-			returnTo: 'http://localhost:5173/',
+			returnTo: `${window.location.origin}/`,
 		},
 	});
 });
 
-
 const checkAuth = async () => {
 	const isAuthenticated = await auth0.isAuthenticated();
-  // console.log(isAuthenticated ? "User is authenticated" : "User is not authenticated");
+	// console.log(isAuthenticated ? "User is authenticated" : "User is not authenticated");
 	logoutButton.classList.add('hidden');
-  if (isAuthenticated) {
-    // User is authenticated, proceed to load tasks or other user-specific data
-    loadTasks();
+	if (isAuthenticated) {
+		// User is authenticated, proceed to load tasks or other user-specific data
+		loadTasks();
 		loginButton.classList.add('hidden');
 		logoutButton.classList.remove('hidden');
-  }
+	}
 };
-
 
 window.onload = async () => {
 	if (window.location.search.includes('code=') && window.location.search.includes('state=')) {
-			await auth0.handleRedirectCallback();
-			window.history.replaceState({}, document.title, '/'); // Clean up URL
-			checkAuth(); // Call loadTasks here after handling redirect callback
+		await auth0.handleRedirectCallback();
+		window.history.replaceState({}, document.title, '/'); // Clean up URL
+		checkAuth(); // Call loadTasks here after handling redirect callback
 	} else {
-			// Even if there's no auth callback in URL, attempt to load tasks
-			checkAuth();
+		// Even if there's no auth callback in URL, attempt to load tasks
+		checkAuth();
 	}
 };
 
 checkAuth();
-
-
-
-
-
-
 
 // load tasks on page load
 // loadTasks();
@@ -319,6 +306,3 @@ checkAuth();
 // 	const user = await auth0.getUser();
 // 	console.log('User:', user);
 // });
-
-
-
