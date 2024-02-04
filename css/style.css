@@ -7,12 +7,12 @@ font-family: 'Space Mono', monospace; */
 	--elements-distance: clamp(1rem, 5vw, 2rem);
 	--dark: #111;
 	--light: #eee;
-	--text-900: hsl(0, 0%, 100%);
-	--text-800: hsl(0, 0%, 90%);
-	--text-700: hsl(0, 0%, 70%);
-	--text-900-inverse: hsl(208, 37%, 10%);
-	--global-background: #101016;
-	--border-color: hsla(0, 0%, 100%, 0.3);
+	--text-900: hsl(208, 37%, 10%);
+	--text-800: hsl(208, 37%, 20%);
+	--text-700: hsl(208, 10%, 30%);
+	--text-900-inverse: hsl(0, 0%, 100%);
+	--global-background: #ffffff;
+	--border-color: hsl(0, 0%, 85%);
 	font-family: 'Space Grotesk', Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 	line-height: 1.5;
 	font-weight: 400;
@@ -36,12 +36,12 @@ body {
 	transition: background-color 70ms ease;
 }
 body.dark {
-	--text-900: hsl(208, 37%, 10%);
-	--text-800: hsl(208, 37%, 20%);
-	--text-700: hsl(208, 10%, 30%);
-	--text-900-inverse: hsl(0, 0%, 100%);
-	--global-background: #ffffff;
-	--border-color: hsl(0, 0%, 85%);
+	--text-900: hsl(0, 0%, 100%);
+	--text-800: hsl(0, 0%, 90%);
+	--text-700: hsl(0, 0%, 70%);
+		--text-900-inverse: hsl(208, 37%, 10%);
+	--global-background: #101016;
+	--border-color: hsla(0, 0%, 100%, 0.3);
 }
 /* @media (prefers-color-scheme: light) {
   :root {
@@ -298,7 +298,7 @@ footer > .wrapper {
 .sun {
 	position: absolute;
 	font-size: 1.5em;
-	color: #222;
+	color: var(--light);
 	filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.3));
 	transition: 500ms ease;
 	transform: scale(0);
@@ -310,7 +310,7 @@ footer > .wrapper {
 
 .moon {
 	font-size: 1.5em;
-	color: #eee;
+	color: var(--dark);
 	filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.3));
 	transition: 500ms ease;
 }
