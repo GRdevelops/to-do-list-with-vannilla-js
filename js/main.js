@@ -109,7 +109,7 @@ const loadTasks = async () => {
 		const user = await auth0.getUser();
 		const userEmail = user.email;
 
-		const response = await axios.get(`http://localhost:8080/tasks/user/${userEmail}`, {
+		const response = await axios.get(`https://my-quick-list-backend-5a463dab0825.herokuapp.com/tasks/user/${userEmail}`, {
 			headers: {
 				Authorization: 'Bearer ' + accessToken,
 			},
@@ -135,7 +135,7 @@ const addTask = async taskContent => {
 		const userEmail = user.email;
 
 		const response = await axios.post(
-			'http://localhost:8080/tasks',
+			'https://my-quick-list-backend-5a463dab0825.herokuapp.com/tasks',
 			{
 				user: `${userEmail}`,
 				content: `${taskContent}`,
@@ -176,7 +176,7 @@ form.addEventListener('submit', handleSubmit);
 // Delete a task
 const deleteFromDatabase = async taskId => {
 	try {
-		const response = await axios.delete(`http://localhost:8080/tasks/${taskId}`);
+		const response = await axios.delete(`https://my-quick-list-backend-5a463dab0825.herokuapp.com/tasks/${taskId}`);
 		// console.log(response.data);
 		loadTasks();
 	} catch (error) {
@@ -202,7 +202,7 @@ const modifyTask = async event => {
 	try {
 		const accessToken = await auth0.getTokenSilently();
 		const response = await axios.put(
-			`http://localhost:8080/tasks/${taskId}`,
+			`https://my-quick-list-backend-5a463dab0825.herokuapp.com/tasks/${taskId}`,
 			{
 				content: updatedContent,
 			},
